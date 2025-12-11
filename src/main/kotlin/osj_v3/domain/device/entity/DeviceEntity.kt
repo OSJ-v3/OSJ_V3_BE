@@ -19,7 +19,7 @@ class DeviceEntity(
 
     @Id
     @Column()
-    var id: Int? = null,
+    var id: Int,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
