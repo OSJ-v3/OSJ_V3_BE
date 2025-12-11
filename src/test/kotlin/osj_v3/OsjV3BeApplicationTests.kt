@@ -1,4 +1,4 @@
-package OSJ_V3_BE
+package osj_v3
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

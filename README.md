@@ -1,2 +1,2 @@
-# OSJ_V3_BE
+# osj_v3
 spring 백엔드 레포임
