@@ -7,6 +7,7 @@ import osj_v3.domain.device.repository.DeviceRepository
 import osj_v3.domain.socket.dto.AppStateUpdateDto
 import osj_v3.domain.socket.dto.DeviceStateUpdateDto
 import osj_v3.domain.socket.handler.AppSocketHandler
+import java.time.LocalDateTime
 
 @Service
 class DeviceStateUpdateService(
@@ -19,6 +20,14 @@ class DeviceStateUpdateService(
 
         // app 소켓에 변경사항 전달
         appSocketHandler.sendStatusUpdate(appStateUpdateDto)
+
+        // 시간 설정
+        if(stateUpdateDto.state == DeviceState.AVAILABLE){
+            entity.offTime = LocalDateTime.now()
+        }
+        if(stateUpdateDto.state == DeviceState.WORKING){
+            entity.onTime = LocalDateTime.now()
+        }
 
         // state 변경
         entity.state = stateUpdateDto.state
