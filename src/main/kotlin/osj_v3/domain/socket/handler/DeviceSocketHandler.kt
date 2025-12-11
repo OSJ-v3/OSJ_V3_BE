@@ -15,14 +15,15 @@ class DeviceSocketHandler(
     private val deviceStateUpdateService: DeviceStateUpdateService
 ): TextWebSocketHandler() {
 
-    private val sessions = mutableSetOf<WebSocketSession>()
+    private val sessions = mutableMapOf<Int, WebSocketSession>()
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        sessions.add(session)
         val json = message.payload
 
         // JSON → DTO 변환 시도
         val deviceStateUpdateDto = objectMapper.readValue(json, DeviceStateUpdateDto::class.java)
+        // id별 소켓 저장
+        sessions[deviceStateUpdateDto.id] = session
         // 서비스 로직 실행 (오류가 없다면)
         deviceStateUpdateService.stateUpdate(deviceStateUpdateDto)
     }
