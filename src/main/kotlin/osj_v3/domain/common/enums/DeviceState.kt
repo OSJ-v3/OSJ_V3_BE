@@ -1,5 +1,6 @@
 package osj_v3.domain.common.enums
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 import osj_v3.domain.common.exception.EnumValueNotFoundException
 
@@ -11,6 +12,8 @@ enum class DeviceState(@JsonValue val code: Int) {
 
     companion object {
         //숫자를 enum으로
+        @JvmStatic
+        @JsonCreator // <- JSON의 int 값을 이 메서드의 인수로 전달하도록 지정
         fun from(code: Int): DeviceState =
             entries.firstOrNull { it.code == code }
                 ?: throw EnumValueNotFoundException()

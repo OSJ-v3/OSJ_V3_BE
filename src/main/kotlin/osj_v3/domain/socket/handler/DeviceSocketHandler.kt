@@ -6,6 +6,7 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
+import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.device.service.DeviceStateUpdateService
 import tools.jackson.databind.ObjectMapper
 
@@ -31,8 +32,7 @@ class DeviceSocketHandler(
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
         val deviceId = sessions.remove(session)
         if (deviceId != null) {
-            // state 2 == DeviceState.DISCONNECTED
-            val deviceStateUpdateDto = DeviceStateUpdateDto(deviceId, 2)
+            val deviceStateUpdateDto = DeviceStateUpdateDto(deviceId, DeviceState.DISCONNECTED)
             deviceStateUpdateService.stateUpdate(deviceStateUpdateDto)
         }
     }

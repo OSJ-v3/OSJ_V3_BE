@@ -1,6 +1,8 @@
 package osj_v3.domain.socket.dto
 
+import osj_v3.domain.common.enums.DeviceState
+
 data class AppStateUpdateDto(
     val id: Int,
-    val state: Int
+    val state: DeviceState
 )

@@ -21,7 +21,7 @@ class DeviceStateUpdateService(
         appSocketHandler.sendStatusUpdate(appStateUpdateDto)
 
         // state 변경
-        entity.state = DeviceState.from(stateUpdateDto.state)
+        entity.state = stateUpdateDto.state
         deviceRepository.save(entity)
     }
 }
