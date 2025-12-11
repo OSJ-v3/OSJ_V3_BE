@@ -1,6 +1,8 @@
 package osj_v3.domain.common.enums
 
-enum class DeviceState(val code: Int) {
+import com.fasterxml.jackson.annotation.JsonValue
+
+enum class DeviceState(@JsonValue val code: Int) {
     WORKING(0),      // 작동중
     AVAILABLE(1),    // 사용 가능
     DISCONNECTED(2), // 연결 끊김
