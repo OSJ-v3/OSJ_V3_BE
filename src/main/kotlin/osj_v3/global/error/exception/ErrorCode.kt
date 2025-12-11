@@ -5,4 +5,5 @@ enum class ErrorCode (
     val message: String
 ) {
     ID_NOT_FOUND(404, "id를 찾을 수 없습니다"),
+    SESSION_NOT_FOUND(500, "세션을 찾을 수 없습니다.")
 }
