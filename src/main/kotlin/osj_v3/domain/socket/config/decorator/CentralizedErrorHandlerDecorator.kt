@@ -7,6 +7,7 @@ import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator
 import osj_v3.global.error.exception.OsjException
+import tools.jackson.core.exc.StreamReadException
 import tools.jackson.databind.exc.MismatchedInputException
 
 class CentralizedErrorHandlerDecorator(
@@ -21,9 +22,11 @@ class CentralizedErrorHandlerDecorator(
         } catch (e: OsjException) {
             // OsjException (IdNotFoundException 포함) 처리
             handleOsjException(session, e)
-        } catch (e: MismatchedInputException){
+        } catch (e: MismatchedInputException) {
             //json 파싱 실패
             handleMismatchedInputException(session, e)
+        } catch (e: StreamReadException){
+            handleStreamReadException(session, e)
         } catch (e: Exception) {
             // 기타 모든 예상치 못한 오류 처리 (JsonProcessingException 등)
             handleGenericException(session, e)
@@ -43,6 +46,16 @@ class CentralizedErrorHandlerDecorator(
     }
 
     private fun handleMismatchedInputException(session: WebSocketSession, e: MismatchedInputException) {
+        val responseMessage = """
+            {"status": 400, "code": "BAD_REQUEST", "message": "잘못된 형식 입니다."}
+        """.trimIndent()
+
+        if (session.isOpen) {
+            session.sendMessage(TextMessage(responseMessage))
+        }
+    }
+
+    private fun handleStreamReadException(session: WebSocketSession, e: StreamReadException) {
         val responseMessage = """
             {"status": 400, "code": "BAD_REQUEST", "message": "잘못된 JSON 입니다."}
         """.trimIndent()
