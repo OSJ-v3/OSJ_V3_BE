@@ -6,8 +6,6 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
-import osj_v3.domain.common.enums.DeviceLocation
-import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.device.service.DeviceStateUpdateService
 import osj_v3.domain.socket.exception.SessionNotFoundException
 import tools.jackson.databind.ObjectMapper
