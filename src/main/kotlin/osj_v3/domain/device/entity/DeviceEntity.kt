@@ -18,8 +18,8 @@ import java.time.LocalDateTime
 class DeviceEntity(
 
     @Id
-    @Column()
-    var id: Int,
+    @Column
+    val id: Int,
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -31,7 +31,7 @@ class DeviceEntity(
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    val deviceLocation: DeviceLocation,
+    var deviceLocation: DeviceLocation,
 
     @Column(nullable = false)
     var onTime: LocalDateTime,
