@@ -7,7 +7,6 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.device.service.DeviceStateUpdateService
-import osj_v3.domain.socket.exception.SessionNotFoundException
 import tools.jackson.databind.ObjectMapper
 
 
@@ -30,10 +29,11 @@ class DeviceSocketHandler(
         deviceStateUpdateService.stateUpdate(deviceStateUpdateDto)
     }
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        val deviceId = sessions.remove(session)?: throw SessionNotFoundException()
-
-        // state 2 == DeviceState.DISCONNECTED
-        val deviceStateUpdateDto = DeviceStateUpdateDto(deviceId, 2)
-        deviceStateUpdateService.stateUpdate(deviceStateUpdateDto)
+        val deviceId = sessions.remove(session)
+        if (deviceId != null) {
+            // state 2 == DeviceState.DISCONNECTED
+            val deviceStateUpdateDto = DeviceStateUpdateDto(deviceId, 2)
+            deviceStateUpdateService.stateUpdate(deviceStateUpdateDto)
+        }
     }
 }
