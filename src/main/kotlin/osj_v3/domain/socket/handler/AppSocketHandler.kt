@@ -1,12 +1,12 @@
 package osj_v3.domain.socket.handler
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.socket.dto.AppStateUpdateDto
-import tools.jackson.databind.ObjectMapper
 
 @Component
 class AppSocketHandler(

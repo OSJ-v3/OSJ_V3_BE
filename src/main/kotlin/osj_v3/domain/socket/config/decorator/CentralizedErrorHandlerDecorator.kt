@@ -1,5 +1,7 @@
 package osj_v3.domain.socket.config.decorator
 
+import com.fasterxml.jackson.core.exc.StreamReadException
+import com.fasterxml.jackson.databind.exc.MismatchedInputException
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketHandler
@@ -7,8 +9,6 @@ import org.springframework.web.socket.WebSocketMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.WebSocketHandlerDecorator
 import osj_v3.global.error.exception.OsjException
-import tools.jackson.core.exc.StreamReadException
-import tools.jackson.databind.exc.MismatchedInputException
 
 class CentralizedErrorHandlerDecorator(
     private val delegate: WebSocketHandler

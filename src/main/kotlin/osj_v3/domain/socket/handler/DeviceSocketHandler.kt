@@ -1,5 +1,6 @@
 package osj_v3.domain.socket.handler
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import osj_v3.domain.socket.dto.DeviceStateUpdateDto
 import org.springframework.stereotype.Component
 import org.springframework.web.socket.CloseStatus
@@ -8,7 +9,6 @@ import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.device.service.DeviceStateUpdateService
-import tools.jackson.databind.ObjectMapper
 
 
 @Component
