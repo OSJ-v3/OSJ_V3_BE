@@ -6,16 +6,21 @@ import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
+import osj_v3.domain.device.service.DeviceFindAllService
 import osj_v3.domain.socket.dto.AppStateUpdateDto
 
 @Component
 class AppSocketHandler(
     private val objectMapper: ObjectMapper,
+    private val deviceFindAllService: DeviceFindAllService
 ): TextWebSocketHandler() {
     private val sessions = mutableSetOf<WebSocketSession>()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         sessions.add(session)
+        val list = deviceFindAllService.findAll()
+        val jsonResponse = objectMapper.writeValueAsString(list)
+        session.sendMessage(TextMessage(jsonResponse))
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {

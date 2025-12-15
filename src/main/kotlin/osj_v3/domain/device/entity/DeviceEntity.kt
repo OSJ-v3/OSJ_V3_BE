@@ -6,10 +6,7 @@ import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import lombok.NoArgsConstructor
-import osj_v3.domain.common.enums.DeviceLocation
 import osj_v3.domain.common.enums.DeviceState
-import osj_v3.domain.common.enums.DeviceType
 import java.time.LocalDateTime
 
 @Entity
@@ -24,14 +21,6 @@ class DeviceEntity(
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     var state: DeviceState,
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    var deviceType: DeviceType,
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    var deviceLocation: DeviceLocation,
 
     @Column(nullable = false)
     var onTime: LocalDateTime,
