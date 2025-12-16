@@ -7,10 +7,10 @@ import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.device.service.DeviceFindAllService
-import osj_v3.domain.socket.dto.AppStateUpdateDto
+import osj_v3.domain.socket.dto.ClientStateUpdateDto
 
 @Component
-class AppSocketHandler(
+class ClientSocketHandler(
     private val objectMapper: ObjectMapper,
     private val deviceFindAllService: DeviceFindAllService
 ): TextWebSocketHandler() {
@@ -27,7 +27,7 @@ class AppSocketHandler(
         sessions.remove(session)
     }
 
-    fun sendStatusUpdate(status: AppStateUpdateDto) {
+    fun sendStatusUpdate(status: ClientStateUpdateDto) {
         val nowSessions = sessions.toList()
         for (session in nowSessions) {
             if (session.isOpen) {
