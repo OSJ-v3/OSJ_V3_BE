@@ -2,6 +2,7 @@ package osj_v3.domain.fcm.service
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import osj_v3.domain.fcm.dto.StateUpdateDto
 import osj_v3.domain.fcm.repository.StateNotificationRepository
@@ -11,8 +12,15 @@ import java.time.LocalDateTime
 class FcmStateUpdateService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
+    @Transactional
     fun fcmStateUpdate(stateUpdateDto: StateUpdateDto) {
-        val entities = stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
+        //엔티티조회
+        val entities = stateNotificationRepository.findAllByTargetDeviceIdAndExpectState(
+            targetDeviceId = stateUpdateDto.deviceId,
+            expectState = stateUpdateDto.state
+        )
+        //엔티티삭제
+        stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
             targetDeviceId = stateUpdateDto.deviceId,
             expectState = stateUpdateDto.state
         )
@@ -27,7 +35,7 @@ class FcmStateUpdateService(
                 .setToken(entity.token)
                 .putAllData(customData)        // 데이터 추가
                 .build()
-            FirebaseMessaging.getInstance().send(message)
+            println(FirebaseMessaging.getInstance().send(message, true))
         }
     }
 }
