@@ -8,10 +8,14 @@ import java.util.UUID
 
 @Repository
 interface StateNotificationRepository : JpaRepository<StateNotificationEntity, UUID>{
-    fun deleteAllByTargetDeviceIdAndExpectState(
+    fun findAllByTargetDeviceIdAndExpectState(
         targetDeviceId: Int,
         expectState: DeviceState
     ): List<StateNotificationEntity>
+    fun deleteAllByTargetDeviceIdAndExpectState(
+        targetDeviceId: Int,
+        expectState: DeviceState
+    )
     fun findByTargetDeviceIdAndExpectStateAndToken(
         targetDeviceId: Int,
         expectState: DeviceState,
