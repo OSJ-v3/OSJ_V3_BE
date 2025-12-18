@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
-import org.hibernate.annotations.GenericGenerator
 import osj_v3.domain.common.enums.DeviceState
 import java.util.UUID
 
@@ -21,7 +20,6 @@ import java.util.UUID
 class StateNotificationEntity(
     @Id
     @GeneratedValue(generator = "UUID")
-    @GenericGenerator(name = "UUID", strategy = "org.hibernate.id.UUIDGenerator")
     @Column(columnDefinition = "BINARY(16)") // MySQL UUID 효율적 저장
     val id: UUID? = null,
 

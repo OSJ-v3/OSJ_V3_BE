@@ -12,7 +12,7 @@ class FcmStateUpdateService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
     fun fcmStateUpdate(stateUpdateDto: StateUpdateDto) {
-        val entities = stateNotificationRepository.findAllByTargetDeviceIdAndExpectState(
+        val entities = stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
             targetDeviceId = stateUpdateDto.deviceId,
             expectState = stateUpdateDto.state
         )
