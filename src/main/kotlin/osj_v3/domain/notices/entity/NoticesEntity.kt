@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 class NoticesEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Int? = null,
+    val id: Int = 0,
 
     @Column(name = "title", nullable = false, length = 255)
     var title: String,

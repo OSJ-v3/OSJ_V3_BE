@@ -19,7 +19,7 @@ class NoticesCreateService(
         return NoticesDto(
             title = entity.title,
             content = entity.contents,
-            id = entity.id!!,
+            id = entity.id,
             createdAt = entity.createdAt.toString()
         )
     }
