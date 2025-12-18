@@ -39,14 +39,13 @@ dependencies {
     // 4. DB
     runtimeOnly("com.mysql:mysql-connector-j")
 
-    // 5. Utils
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
-    // 6. Test
+    // 5. Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // 6. Firebase Admin SDK
+    implementation("com.google.firebase:firebase-admin:9.7.0")
 }
 
 kotlin {
