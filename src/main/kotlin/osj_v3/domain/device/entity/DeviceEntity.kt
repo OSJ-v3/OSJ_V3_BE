@@ -23,8 +23,5 @@ class DeviceEntity(
     var state: DeviceState,
 
     @Column(nullable = false)
-    var onTime: LocalDateTime,
-
-    @Column(nullable = false)
-    var offTime: LocalDateTime,
+    var updatedAt: LocalDateTime = LocalDateTime.now()
 )
