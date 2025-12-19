@@ -1,7 +1,7 @@
 package osj_v3.domain.notices.service
 
 import org.springframework.stereotype.Service
-import osj_v3.domain.fcm.service.FcmSandNoticesService
+import osj_v3.domain.fcm.service.FcmSendNoticesService
 import osj_v3.domain.notices.dto.NoticePayloadDto
 import osj_v3.domain.notices.dto.NoticesCreateDto
 import osj_v3.domain.notices.dto.NoticesDto
@@ -11,7 +11,7 @@ import osj_v3.domain.notices.repository.NoticesRepository
 @Service
 class NoticesCreateService(
     private val noticesRepository: NoticesRepository,
-    private val fcmSandNoticesService: FcmSandNoticesService
+    private val fcmSendNoticesService: FcmSendNoticesService
 ) {
     fun createNotices(noticesCreateDto: NoticesCreateDto): NoticesDto{
         val entity = NoticesEntity(
@@ -20,7 +20,7 @@ class NoticesCreateService(
         )
         noticesRepository.save(entity)
 
-        fcmSandNoticesService.sendNotices(
+        fcmSendNoticesService.sendNotices(
             NoticePayloadDto(
                 createAt = entity.createdAt,
                 title = entity.title,

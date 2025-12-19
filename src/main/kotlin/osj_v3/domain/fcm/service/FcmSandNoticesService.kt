@@ -8,7 +8,7 @@ import osj_v3.domain.fcm.repository.NoticeSubscriptionRepository
 import osj_v3.domain.notices.dto.NoticePayloadDto
 
 @Service
-class FcmSandNoticesService(
+class FcmSendNoticesService(
     private val noticeSubscriptionRepository: NoticeSubscriptionRepository
 ) {
     fun sendNotices(noticePayloadDto: NoticePayloadDto) {
