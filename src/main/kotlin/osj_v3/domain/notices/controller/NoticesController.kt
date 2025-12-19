@@ -1,5 +1,6 @@
 package osj_v3.domain.notices.controller
 
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -29,7 +30,7 @@ class NoticesController(
     private val fcmIsSubscribedService: FcmIsSubscribedService
 ) {
     @PostMapping
-    fun createNotices(@RequestBody noticesCreateDto: NoticesCreateDto): NoticesDto{
+    fun createNotices(@RequestBody @Valid noticesCreateDto: NoticesCreateDto): NoticesDto{
         return noticesCreateService.createNotices(noticesCreateDto)
     }
 
