@@ -19,11 +19,6 @@ class FcmStateUpdateService(
             targetDeviceId = stateUpdateDto.deviceId,
             expectState = stateUpdateDto.state
         )
-        //엔티티삭제
-        stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
-            targetDeviceId = stateUpdateDto.deviceId,
-            expectState = stateUpdateDto.state
-        )
         for(entity in entities){
             val customData = mapOf(
                 "device_id" to entity.targetDeviceId.toString(),
@@ -35,7 +30,12 @@ class FcmStateUpdateService(
                 .setToken(entity.token)
                 .putAllData(customData)        // 데이터 추가
                 .build()
-            println(FirebaseMessaging.getInstance().send(message, true))
+            FirebaseMessaging.getInstance().send(message, true)
         }
+        //엔티티삭제
+        stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
+            targetDeviceId = stateUpdateDto.deviceId,
+            expectState = stateUpdateDto.state
+        )
     }
 }
