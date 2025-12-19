@@ -10,10 +10,10 @@ import osj_v3.domain.notices.repository.NoticesRepository
 class NoticesCreateService(
     private val noticesRepository: NoticesRepository
 ) {
-    fun createNotices(NoticesCreateDto: NoticesCreateDto): NoticesDto{
+    fun createNotices(noticesCreateDto: NoticesCreateDto): NoticesDto{
         val entity = NoticesEntity(
-            title = NoticesCreateDto.title,
-            contents = NoticesCreateDto.content
+            title = noticesCreateDto.title,
+            contents = noticesCreateDto.content
         )
         noticesRepository.save(entity)
         return NoticesDto(

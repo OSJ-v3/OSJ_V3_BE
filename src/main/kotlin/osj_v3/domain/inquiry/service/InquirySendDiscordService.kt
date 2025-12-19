@@ -9,7 +9,7 @@ import osj_v3.domain.inquiry.dto.InquiryRequestDto
 class InquirySendDiscordService(
     private val discordClient: DiscordClient
 ) {
-    fun sandInquiryDiscord(inquiryRequestDto: InquiryRequestDto) {
+    fun sendInquiryDiscord(inquiryRequestDto: InquiryRequestDto) {
         // 1. Embed 객체 생성 (데이터 변환)
         val embed = DiscordMessage.Embed(
             title = "[${inquiryRequestDto.category.description}] ${inquiryRequestDto.title}", // 예: [버그 제보] 로그인 안됨

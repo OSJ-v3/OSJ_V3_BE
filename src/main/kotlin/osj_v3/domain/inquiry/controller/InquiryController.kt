@@ -14,6 +14,6 @@ class InquiryController(
 ) {
     @PostMapping
     fun receiveInquiry(@RequestBody inquiryRequestDto: InquiryRequestDto) {
-        inquirySendDiscordService.sandInquiryDiscord(inquiryRequestDto)
+        inquirySendDiscordService.sendInquiryDiscord(inquiryRequestDto)
     }
 }

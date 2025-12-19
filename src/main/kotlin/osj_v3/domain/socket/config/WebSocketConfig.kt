@@ -12,7 +12,7 @@ import osj_v3.domain.socket.handler.ClientSocketHandler
 @EnableWebSocket
 class WebSocketConfig(
     private val deviceSocketHandler: DeviceSocketHandler,
-    private val ClientSocketHandler: ClientSocketHandler
+    private val clientSocketHandler: ClientSocketHandler
 ): WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
@@ -20,7 +20,7 @@ class WebSocketConfig(
         // 데코레이터로 감싸서 입-출력 값 조정
         // 에러처리 방식으로 사용
         val decoratedDeviceSocketHandler = CentralizedErrorHandlerDecorator(deviceSocketHandler)
-        val decoratedClientSocketHandler = CentralizedErrorHandlerDecorator(ClientSocketHandler)
+        val decoratedClientSocketHandler = CentralizedErrorHandlerDecorator(clientSocketHandler)
 
         registry.addHandler(decoratedDeviceSocketHandler, "/device")
             .setAllowedOrigins("*")
