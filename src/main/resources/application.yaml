@@ -23,3 +23,5 @@ discord:
   webhook-url: ${DISCORD_WEBHOOK_URL}
 fcm:
   key: ${FCM_CONTENTS}
+cors:
+  allowed-origins: "http://localhost:3000,http://localhost:3000"
