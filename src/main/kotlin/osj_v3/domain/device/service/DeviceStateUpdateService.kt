@@ -20,20 +20,20 @@ class DeviceStateUpdateService(
         val entity = deviceRepository.findEntityById(stateUpdateDto.id)?: throw IdNotFoundException()
         val clientStateUpdateDto = ClientStateUpdateDto(stateUpdateDto.id, stateUpdateDto.state)
 
-        // client 소켓에 변경사항 전달
-        clientSocketHandler.sendStatusUpdate(clientStateUpdateDto)
-        //알람 날리기
-        fcmStateUpdateService.fcmStateUpdate(StateUpdateDto(
-            deviceId = entity.id,
-            state = stateUpdateDto.state,
-            prevAt = entity.updatedAt
-        ))
-
         // 시간 설정
         entity.updatedAt = LocalDateTime.now()
 
         // state 변경
         entity.state = stateUpdateDto.state
         deviceRepository.save(entity)
+
+        // client 소켓에 변경사항 전달
+        clientSocketHandler.sendStatusUpdate(clientStateUpdateDto)
+        //알람 날리기
+        fcmStateUpdateService.fcmStateUpdate(StateUpdateDto(
+            deviceId = entity.id,
+            state = entity.state,
+            prevAt = entity.updatedAt
+        ))
     }
 }
