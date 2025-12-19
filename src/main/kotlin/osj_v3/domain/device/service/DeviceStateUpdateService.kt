@@ -25,7 +25,7 @@ class DeviceStateUpdateService(
         //알람 날리기
         fcmStateUpdateService.fcmStateUpdate(StateUpdateDto(
             deviceId = entity.id,
-            state = entity.state,
+            state = stateUpdateDto.state,
             prevAt = entity.updatedAt
         ))
 
