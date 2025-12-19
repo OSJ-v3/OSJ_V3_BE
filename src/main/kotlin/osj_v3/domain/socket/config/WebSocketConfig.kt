@@ -1,5 +1,6 @@
 package osj_v3.domain.socket.config
 
+import org.springframework.beans.factory.annotation.Value
 import osj_v3.domain.socket.handler.DeviceSocketHandler
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.socket.config.annotation.EnableWebSocket
@@ -12,7 +13,9 @@ import osj_v3.domain.socket.handler.ClientSocketHandler
 @EnableWebSocket
 class WebSocketConfig(
     private val deviceSocketHandler: DeviceSocketHandler,
-    private val clientSocketHandler: ClientSocketHandler
+    private val clientSocketHandler: ClientSocketHandler,
+    @Value("\${cors.allowed-origins}")
+    private val allowedOrigins: String
 ): WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
@@ -23,8 +26,8 @@ class WebSocketConfig(
         val decoratedClientSocketHandler = CentralizedErrorHandlerDecorator(clientSocketHandler)
 
         registry.addHandler(decoratedDeviceSocketHandler, "/device")
-            .setAllowedOrigins("*")
+            .setAllowedOrigins(allowedOrigins)
         registry.addHandler(decoratedClientSocketHandler, "/client")
-            .setAllowedOrigins("*")
+            .setAllowedOrigins(allowedOrigins)
     }
 }
