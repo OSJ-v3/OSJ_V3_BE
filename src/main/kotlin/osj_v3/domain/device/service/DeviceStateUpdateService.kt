@@ -1,5 +1,6 @@
 package osj_v3.domain.device.service
 
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import osj_v3.domain.device.exception.IdNotFoundException
 import osj_v3.domain.device.repository.DeviceRepository
@@ -25,15 +26,24 @@ class DeviceStateUpdateService(
 
         // state 변경
         entity.state = stateUpdateDto.state
+
+        // fcm 전송에서 에러가 났을때 다른 클라에게 메세지가 가면 안됌 글서 try 씀
+        try {
+            //알람 날리기
+            fcmStateUpdateService.fcmStateUpdate(
+                StateUpdateDto(
+                    deviceId = entity.id,
+                    state = entity.state,
+                    prevAt = entity.updatedAt
+                )
+            )
+        } catch (e: Exception) {
+            val logger = KotlinLogging.logger {}
+            logger.error(e.message, e)
+        }
         deviceRepository.save(entity)
 
         // client 소켓에 변경사항 전달
         clientSocketHandler.sendStatusUpdate(clientStateUpdateDto)
-        //알람 날리기
-        fcmStateUpdateService.fcmStateUpdate(StateUpdateDto(
-            deviceId = entity.id,
-            state = entity.state,
-            prevAt = entity.updatedAt
-        ))
     }
 }

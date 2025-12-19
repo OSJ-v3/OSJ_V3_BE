@@ -48,6 +48,9 @@ dependencies {
 
     // 6. Firebase Admin SDK
     implementation("com.google.firebase:firebase-admin:9.7.0")
+
+    // 7. log
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 }
 
 dependencyManagement {
