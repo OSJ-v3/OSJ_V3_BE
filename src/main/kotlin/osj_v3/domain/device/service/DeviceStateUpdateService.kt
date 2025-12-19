@@ -21,6 +21,7 @@ class DeviceStateUpdateService(
         val entity = deviceRepository.findEntityById(stateUpdateDto.id)?: throw IdNotFoundException()
         val clientStateUpdateDto = ClientStateUpdateDto(stateUpdateDto.id, stateUpdateDto.state)
 
+        if(entity.state == stateUpdateDto.state) return
         val prevAt = entity.updatedAt
         // 시간 설정
         entity.updatedAt = LocalDateTime.now()
