@@ -9,10 +9,10 @@ import osj_v3.domain.fcm.repository.StateNotificationRepository
 import java.time.LocalDateTime
 
 @Service
-class FcmStateUpdateService(
+class FcmSendStateUpdateService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
-    fun fcmStateUpdate(stateUpdateDto: StateUpdateDto) {
+    fun fcmSendStateUpdate(stateUpdateDto: StateUpdateDto) {
         //엔티티조회
         val entities = stateNotificationRepository.findAllByTargetDeviceIdAndExpectState(
             targetDeviceId = stateUpdateDto.deviceId,
