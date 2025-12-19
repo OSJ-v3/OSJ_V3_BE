@@ -3,6 +3,7 @@ package osj_v3.domain.fcm.controller
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -20,11 +21,11 @@ class FcmController(
     private val fcmTokenRequestService: FcmTokenRequestService
 ) {
     @PostMapping
-    fun tokenSave(fcmDto: FcmDto) {
+    fun tokenSave(@RequestBody fcmDto: FcmDto) {
         fcmTokenSaveService.tokenSave(fcmDto)
     }
     @DeleteMapping
-    fun tokenDelete(fcmDto: FcmDto){
+    fun tokenDelete(@RequestBody fcmDto: FcmDto){
         fcmTokenDeleteService.tokenDelete(fcmDto)
     }
     @GetMapping("/list")

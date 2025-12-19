@@ -3,6 +3,7 @@ package osj_v3.domain.fcm.entity
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
@@ -19,7 +20,7 @@ import java.util.UUID
 
 class StateNotificationEntity(
     @Id
-    @GeneratedValue(generator = "UUID")
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)") // MySQL UUID 효율적 저장
     val id: UUID? = null,
 

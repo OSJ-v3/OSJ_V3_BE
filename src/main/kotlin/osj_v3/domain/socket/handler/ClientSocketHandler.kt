@@ -8,13 +8,14 @@ import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.device.service.DeviceFindAllService
 import osj_v3.domain.socket.dto.ClientStateUpdateDto
+import java.util.concurrent.ConcurrentHashMap
 
 @Component
 class ClientSocketHandler(
     private val objectMapper: ObjectMapper,
     private val deviceFindAllService: DeviceFindAllService
 ): TextWebSocketHandler() {
-    private val sessions = mutableSetOf<WebSocketSession>()
+    private val sessions = ConcurrentHashMap.newKeySet<WebSocketSession>()
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
         sessions.add(session)

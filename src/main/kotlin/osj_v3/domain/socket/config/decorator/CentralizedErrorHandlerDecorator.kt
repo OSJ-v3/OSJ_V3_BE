@@ -73,6 +73,6 @@ class CentralizedErrorHandlerDecorator(
         if (session.isOpen) {
             session.sendMessage(TextMessage(responseMessage))
         }
-        logger.error(e.message, e)
+        logger.error("소켓 내부 오류: ${e.message}", e)
     }
 }

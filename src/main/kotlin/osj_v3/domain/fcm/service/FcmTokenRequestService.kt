@@ -12,8 +12,8 @@ class FcmTokenRequestService(
         val entities = stateNotificationRepository.findAllByToken(token)
         return entities.map {
             FcmByTokenDto(
-                token = it.targetDeviceId.toString(),
-                state = it.expectState.toString()
+                id = it.targetDeviceId,
+                expectState = it.expectState.code
             )
         }
     }

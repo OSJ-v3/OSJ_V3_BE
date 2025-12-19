@@ -4,6 +4,7 @@ import com.google.auth.oauth2.GoogleCredentials
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import jakarta.annotation.PostConstruct
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Configuration
 import java.io.ByteArrayInputStream
@@ -33,7 +34,8 @@ class FirebaseConfig {
                 FirebaseApp.initializeApp(options)
             }
         } catch (e: Exception) {
-            // 로깅 라이브러리(log.error 등)를 사용하는 것이 좋습니다.
+            val logger = KotlinLogging.logger {}
+            logger.error("FCM 초기화 실패: ${e.message}", e)
             throw RuntimeException("FCM 초기화 에러: ${e.message}")
         }
     }

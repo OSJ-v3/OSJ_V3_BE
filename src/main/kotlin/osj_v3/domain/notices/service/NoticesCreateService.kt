@@ -1,21 +1,33 @@
 package osj_v3.domain.notices.service
 
 import org.springframework.stereotype.Service
-import osj_v3.domain.notices.dto.NoticesCrateDto
+import osj_v3.domain.fcm.service.FcmSendNoticesService
+import osj_v3.domain.notices.dto.NoticePayloadDto
+import osj_v3.domain.notices.dto.NoticesCreateDto
 import osj_v3.domain.notices.dto.NoticesDto
 import osj_v3.domain.notices.entity.NoticesEntity
 import osj_v3.domain.notices.repository.NoticesRepository
 
 @Service
 class NoticesCreateService(
-    private val noticesRepository: NoticesRepository
+    private val noticesRepository: NoticesRepository,
+    private val fcmSendNoticesService: FcmSendNoticesService
 ) {
-    fun createNotices(noticesCrateDto: NoticesCrateDto): NoticesDto{
+    fun createNotices(noticesCreateDto: NoticesCreateDto): NoticesDto{
         val entity = NoticesEntity(
-            title = noticesCrateDto.title,
-            contents = noticesCrateDto.content
+            title = noticesCreateDto.title,
+            contents = noticesCreateDto.content
         )
         noticesRepository.save(entity)
+
+        fcmSendNoticesService.sendNotices(
+            NoticePayloadDto(
+                createAt = entity.createdAt,
+                title = entity.title,
+                content = entity.contents
+            )
+        )
+
         return NoticesDto(
             title = entity.title,
             content = entity.contents,

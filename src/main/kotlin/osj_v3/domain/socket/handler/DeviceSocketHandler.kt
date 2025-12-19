@@ -9,6 +9,7 @@ import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.device.service.DeviceStateUpdateService
+import java.util.concurrent.ConcurrentHashMap
 
 
 @Component
@@ -17,7 +18,7 @@ class DeviceSocketHandler(
     private val deviceStateUpdateService: DeviceStateUpdateService
 ): TextWebSocketHandler() {
 
-    private val sessions = mutableMapOf<WebSocketSession, Int>()
+    private val sessions = ConcurrentHashMap<WebSocketSession, Int>()
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
         val json = message.payload

@@ -1,5 +1,6 @@
 package osj_v3.domain.notices.controller
 
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 import osj_v3.domain.fcm.dto.NoticesAlertsSubscribedDto
 import osj_v3.domain.fcm.service.FcmIsSubscribedService
 import osj_v3.domain.fcm.service.FcmSubscriptionService
-import osj_v3.domain.notices.dto.NoticesCrateDto
+import osj_v3.domain.notices.dto.NoticesCreateDto
 import osj_v3.domain.notices.dto.NoticesDto
 import osj_v3.domain.notices.service.NoticesCreateService
 import osj_v3.domain.notices.service.NoticesDeleteByIdService
@@ -29,8 +30,8 @@ class NoticesController(
     private val fcmIsSubscribedService: FcmIsSubscribedService
 ) {
     @PostMapping
-    fun createNotices(@RequestBody noticesCrateDto: NoticesCrateDto): NoticesDto{
-        return noticesCreateService.createNotices(noticesCrateDto)
+    fun createNotices(@RequestBody @Valid noticesCreateDto: NoticesCreateDto): NoticesDto{
+        return noticesCreateService.createNotices(noticesCreateDto)
     }
 
     @GetMapping
