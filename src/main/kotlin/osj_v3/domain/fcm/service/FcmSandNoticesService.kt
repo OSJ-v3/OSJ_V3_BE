@@ -31,7 +31,7 @@ class FcmSendNoticesService(
                 FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
             } catch (e: Exception) {
                 val logger = KotlinLogging.logger {}
-                logger.error(e.message, e)
+                logger.error("공지 알람 전송 실패: ${e.message}", e)
             }
         }
     }

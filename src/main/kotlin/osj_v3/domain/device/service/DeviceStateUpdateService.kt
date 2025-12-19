@@ -42,7 +42,7 @@ class DeviceStateUpdateService(
             )
         } catch (e: Exception) {
             val logger = KotlinLogging.logger {}
-            logger.error(e.message, e)
+            logger.error("세탁기 알람 전송 실패: ${e.message}", e)
         }
 
         // client 소켓에 변경사항 전달
