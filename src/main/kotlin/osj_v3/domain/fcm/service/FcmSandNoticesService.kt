@@ -2,6 +2,7 @@ package osj_v3.domain.fcm.service
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.MulticastMessage
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import osj_v3.domain.fcm.repository.NoticeSubscriptionRepository
 import osj_v3.domain.notices.dto.NoticePayloadDto
@@ -21,10 +22,17 @@ class FcmSandNoticesService(
 
         val tokens = entities.map { it.token }
 
-        val multicastMessage = MulticastMessage.builder()
-            .addAllTokens(tokens)
-            .putAllData(customData)
-            .build()
-        FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
+        tokens.chunked(500).forEach {
+            val multicastMessage = MulticastMessage.builder()
+                .addAllTokens(it)
+                .putAllData(customData)
+                .build()
+            try {
+                FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
+            } catch (e: Exception) {
+                val logger = KotlinLogging.logger {}
+                logger.error(e.message, e)
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package osj_v3.domain.notices.service
 
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import osj_v3.domain.fcm.service.FcmSandNoticesService
 import osj_v3.domain.notices.dto.NoticePayloadDto
@@ -21,19 +20,13 @@ class NoticesCreateService(
         )
         noticesRepository.save(entity)
 
-        try {
-            fcmSandNoticesService.sendNotices(
-                NoticePayloadDto(
-                    createAt = entity.createdAt,
-                    title = entity.title,
-                    content = entity.contents
-                )
+        fcmSandNoticesService.sendNotices(
+            NoticePayloadDto(
+                createAt = entity.createdAt,
+                title = entity.title,
+                content = entity.contents
             )
-        }
-        catch (e: Exception) {
-            val logger = KotlinLogging.logger {}
-            logger.error(e.message, e)
-        }
+        )
 
         return NoticesDto(
             title = entity.title,
