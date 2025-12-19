@@ -1,5 +1,6 @@
 package osj_v3.domain.fcm.repository
 
+import jakarta.transaction.Transactional
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import osj_v3.domain.common.enums.DeviceState
@@ -12,6 +13,7 @@ interface StateNotificationRepository : JpaRepository<StateNotificationEntity, U
         targetDeviceId: Int,
         expectState: DeviceState
     ): List<StateNotificationEntity>
+    @Transactional
     fun deleteAllByTargetDeviceIdAndExpectState(
         targetDeviceId: Int,
         expectState: DeviceState
