@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController
 import osj_v3.domain.fcm.dto.NoticesAlertsSubscribedDto
 import osj_v3.domain.fcm.service.FcmIsSubscribedService
 import osj_v3.domain.fcm.service.FcmSubscriptionService
-import osj_v3.domain.notices.dto.NoticesCrateDto
+import osj_v3.domain.notices.dto.NoticesCreateDto
 import osj_v3.domain.notices.dto.NoticesDto
 import osj_v3.domain.notices.service.NoticesCreateService
 import osj_v3.domain.notices.service.NoticesDeleteByIdService
@@ -29,8 +29,8 @@ class NoticesController(
     private val fcmIsSubscribedService: FcmIsSubscribedService
 ) {
     @PostMapping
-    fun createNotices(@RequestBody noticesCrateDto: NoticesCrateDto): NoticesDto{
-        return noticesCreateService.createNotices(noticesCrateDto)
+    fun createNotices(@RequestBody NoticesCreateDto: NoticesCreateDto): NoticesDto{
+        return noticesCreateService.createNotices(NoticesCreateDto)
     }
 
     @GetMapping

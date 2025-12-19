@@ -1,7 +1,7 @@
 package osj_v3.domain.notices.service
 
 import org.springframework.stereotype.Service
-import osj_v3.domain.notices.dto.NoticesCrateDto
+import osj_v3.domain.notices.dto.NoticesCreateDto
 import osj_v3.domain.notices.dto.NoticesDto
 import osj_v3.domain.notices.entity.NoticesEntity
 import osj_v3.domain.notices.repository.NoticesRepository
@@ -10,10 +10,10 @@ import osj_v3.domain.notices.repository.NoticesRepository
 class NoticesCreateService(
     private val noticesRepository: NoticesRepository
 ) {
-    fun createNotices(noticesCrateDto: NoticesCrateDto): NoticesDto{
+    fun createNotices(NoticesCreateDto: NoticesCreateDto): NoticesDto{
         val entity = NoticesEntity(
-            title = noticesCrateDto.title,
-            contents = noticesCrateDto.content
+            title = NoticesCreateDto.title,
+            contents = NoticesCreateDto.content
         )
         noticesRepository.save(entity)
         return NoticesDto(

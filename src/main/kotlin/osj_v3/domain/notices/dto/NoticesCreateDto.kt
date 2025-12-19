@@ -1,6 +1,6 @@
 package osj_v3.domain.notices.dto
 
-data class NoticesCrateDto(
+data class NoticesCreateDto(
     val title: String,
     val content: String
 )

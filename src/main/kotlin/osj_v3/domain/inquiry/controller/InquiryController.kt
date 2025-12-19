@@ -5,15 +5,15 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import osj_v3.domain.inquiry.dto.InquiryRequestDto
-import osj_v3.domain.inquiry.service.InquirySandDiscordService
+import osj_v3.domain.inquiry.service.InquirySendDiscordService
 
 @RestController
 @RequestMapping("/inquiry")
 class InquiryController(
-    private val inquirySandDiscordService: InquirySandDiscordService
+    private val InquirySendDiscordService: InquirySendDiscordService
 ) {
     @PostMapping
     fun receiveInquiry(@RequestBody inquiryRequestDto: InquiryRequestDto) {
-        inquirySandDiscordService.inquirySandDiscord(inquiryRequestDto)
+        InquirySendDiscordService.sandInquiryDiscord(inquiryRequestDto)
     }
 }
