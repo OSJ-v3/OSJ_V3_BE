@@ -21,11 +21,13 @@ class DeviceStateUpdateService(
         val entity = deviceRepository.findEntityById(stateUpdateDto.id)?: throw IdNotFoundException()
         val clientStateUpdateDto = ClientStateUpdateDto(stateUpdateDto.id, stateUpdateDto.state)
 
+        val prevAt = entity.updatedAt
         // 시간 설정
         entity.updatedAt = LocalDateTime.now()
 
         // state 변경
         entity.state = stateUpdateDto.state
+        deviceRepository.save(entity)
 
         // fcm 전송에서 에러가 났을때 다른 클라에게 메세지가 가면 안됌 글서 try 씀
         try {
@@ -34,14 +36,13 @@ class DeviceStateUpdateService(
                 StateUpdateDto(
                     deviceId = entity.id,
                     state = entity.state,
-                    prevAt = entity.updatedAt
+                    prevAt = prevAt
                 )
             )
         } catch (e: Exception) {
             val logger = KotlinLogging.logger {}
             logger.error(e.message, e)
         }
-        deviceRepository.save(entity)
 
         // client 소켓에 변경사항 전달
         clientSocketHandler.sendStatusUpdate(clientStateUpdateDto)
