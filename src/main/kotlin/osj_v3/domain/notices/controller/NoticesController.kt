@@ -29,8 +29,8 @@ class NoticesController(
     private val fcmIsSubscribedService: FcmIsSubscribedService
 ) {
     @PostMapping
-    fun createNotices(@RequestBody NoticesCreateDto: NoticesCreateDto): NoticesDto{
-        return noticesCreateService.createNotices(NoticesCreateDto)
+    fun createNotices(@RequestBody noticesCreateDto: NoticesCreateDto): NoticesDto{
+        return noticesCreateService.createNotices(noticesCreateDto)
     }
 
     @GetMapping

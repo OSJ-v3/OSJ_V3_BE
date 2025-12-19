@@ -10,10 +10,10 @@ import osj_v3.domain.inquiry.service.InquirySendDiscordService
 @RestController
 @RequestMapping("/inquiry")
 class InquiryController(
-    private val InquirySendDiscordService: InquirySendDiscordService
+    private val inquirySendDiscordService: InquirySendDiscordService
 ) {
     @PostMapping
     fun receiveInquiry(@RequestBody inquiryRequestDto: InquiryRequestDto) {
-        InquirySendDiscordService.sandInquiryDiscord(inquiryRequestDto)
+        inquirySendDiscordService.sandInquiryDiscord(inquiryRequestDto)
     }
 }
