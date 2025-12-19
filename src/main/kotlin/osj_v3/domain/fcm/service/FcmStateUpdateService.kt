@@ -1,9 +1,7 @@
 package osj_v3.domain.fcm.service
 
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.MulticastMessage
-import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.fcm.dto.StateUpdateDto
