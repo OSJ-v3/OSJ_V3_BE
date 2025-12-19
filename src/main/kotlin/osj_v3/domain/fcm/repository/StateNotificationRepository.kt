@@ -13,20 +13,25 @@ interface StateNotificationRepository : JpaRepository<StateNotificationEntity, U
         targetDeviceId: Int,
         expectState: DeviceState
     ): List<StateNotificationEntity>
+
     @Transactional
     fun deleteAllByTargetDeviceIdAndExpectState(
         targetDeviceId: Int,
         expectState: DeviceState
     )
+
     fun findByTargetDeviceIdAndExpectStateAndToken(
         targetDeviceId: Int,
         expectState: DeviceState,
         token: String
     ): StateNotificationEntity?
+
+    @Transactional
     fun deleteByTargetDeviceIdAndExpectStateAndToken(
         targetDeviceId: Int,
         expectState: DeviceState,
         token: String
     )
+
     fun findAllByToken(token: String): List<StateNotificationEntity>
 }
