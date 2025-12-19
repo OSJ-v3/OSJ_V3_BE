@@ -10,7 +10,7 @@ import osj_v3.global.error.exception.OsjException
 class GlobalExceptionHandler() {
 
     @ExceptionHandler(OsjException::class)
-    fun handlingPickException(e: OsjException): ResponseEntity<ErrorResponse> {
+    fun handlingOsjException(e: OsjException): ResponseEntity<ErrorResponse> {
         val code = e.errorCode
         return ResponseEntity(
             ErrorResponse(code.status, code.message),
