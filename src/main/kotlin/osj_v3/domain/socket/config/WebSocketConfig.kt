@@ -24,10 +24,11 @@ class WebSocketConfig(
         // 에러처리 방식으로 사용
         val decoratedDeviceSocketHandler = CentralizedErrorHandlerDecorator(deviceSocketHandler)
         val decoratedClientSocketHandler = CentralizedErrorHandlerDecorator(clientSocketHandler)
+        val origins = allowedOrigins.split(",").toTypedArray()
 
         registry.addHandler(decoratedDeviceSocketHandler, "/device")
-            .setAllowedOrigins(allowedOrigins)
+            .setAllowedOrigins(*origins)
         registry.addHandler(decoratedClientSocketHandler, "/client")
-            .setAllowedOrigins(allowedOrigins)
+            .setAllowedOrigins(*origins)
     }
 }
