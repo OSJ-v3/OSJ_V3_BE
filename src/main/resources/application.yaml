@@ -24,4 +24,4 @@ discord:
 fcm:
   key: ${FCM_CONTENTS}
 cors:
-  allowed-origins: "*"
+  allowed-origins: "*,a.com"
