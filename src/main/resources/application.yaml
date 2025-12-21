@@ -24,4 +24,4 @@ discord:
 fcm:
   key: ${FCM_CONTENTS}
 cors:
-  allowed-origins: "*,a.com"
+  allowed-origins: "*,https://osjv3.vercel.app"
