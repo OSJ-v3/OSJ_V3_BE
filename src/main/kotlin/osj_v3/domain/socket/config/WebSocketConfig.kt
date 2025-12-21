@@ -27,8 +27,10 @@ class WebSocketConfig(
         val origins = allowedOrigins.split(",").toTypedArray()
 
         registry.addHandler(decoratedDeviceSocketHandler, "/device")
-            .setAllowedOrigins(*origins)
+            .setAllowedOriginPatterns("*")
+            //개발용.setAllowedOrigins(*origins)
         registry.addHandler(decoratedClientSocketHandler, "/client")
-            .setAllowedOrigins(*origins)
+            .setAllowedOriginPatterns("*")
+            //개발용.setAllowedOrigins(*origins)
     }
 }
