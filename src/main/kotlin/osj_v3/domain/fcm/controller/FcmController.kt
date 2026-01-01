@@ -29,7 +29,7 @@ class FcmController(
         fcmTokenDeleteService.tokenDelete(fcmDto)
     }
     @GetMapping("/list")
-    fun tokenList(@RequestParam("fcm_token") token: String): List<FcmByTokenDto> {
+    fun tokenList(@RequestParam("token") token: String): List<FcmByTokenDto> {
         return fcmTokenRequestService.tokenRequest(token)
     }
 }

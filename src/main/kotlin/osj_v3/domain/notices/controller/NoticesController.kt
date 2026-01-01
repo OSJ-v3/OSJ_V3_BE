@@ -50,12 +50,12 @@ class NoticesController(
     }
 
     @PostMapping("/push-alerts")
-    fun pushAlerts(@RequestParam("fcm_token") token: String){
+    fun pushAlerts(@RequestParam("token") token: String){
         fcmSubscriptionService.subscription(token)
     }
 
     @GetMapping("/push-alerts")
-    fun isSubscribed(@RequestParam("fcm_token") token: String): NoticesAlertsSubscribedDto{
+    fun isSubscribed(@RequestParam("token") token: String): NoticesAlertsSubscribedDto{
         return fcmIsSubscribedService.isSubscribed(token)
     }
 }
