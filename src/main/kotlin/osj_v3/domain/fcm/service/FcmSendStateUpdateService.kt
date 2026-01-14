@@ -2,8 +2,9 @@ package osj_v3.domain.fcm.service
 
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.MulticastMessage
+import mu.KotlinLogging
 import org.springframework.stereotype.Service
-import osj_v3.domain.common.enums.DeviceState
+import org.springframework.transaction.annotation.Transactional
 import osj_v3.domain.fcm.dto.StateUpdateDto
 import osj_v3.domain.fcm.repository.StateNotificationRepository
 import java.time.LocalDateTime
@@ -12,16 +13,23 @@ import java.time.LocalDateTime
 class FcmSendStateUpdateService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
+    private val logger = KotlinLogging.logger {}
+
+    // 삭제 로직이 포함되어 있으므로 트랜잭션 필수
+    @Transactional
     fun fcmSendStateUpdate(stateUpdateDto: StateUpdateDto) {
-        println("fcmSendStateUpdate" + "  "+ stateUpdateDto.state + "  " + stateUpdateDto.deviceId)
-        //엔티티조회
         val entities = stateNotificationRepository.findAllByTargetDeviceIdAndExpectState(
             targetDeviceId = stateUpdateDto.deviceId,
             expectState = stateUpdateDto.state
         )
 
-        // 조회 결과가 없으면 바로 종료 (빈 리스트로 FCM 보내면 에러 날 수 있음) 몰라 재미니가 그렇대
-        if (entities.isEmpty()) return
+        // 보낼 토큰이 없으면 바로 종료
+        if (entities.isEmpty()) {
+            logger.info("상태 알림을 보낼 구독자가 없습니다. (DeviceId: ${stateUpdateDto.deviceId})")
+            return
+        }
+
+        val tokens = entities.map { it.token }
 
         val customData = mapOf(
             "device_id" to stateUpdateDto.deviceId.toString(),
@@ -29,43 +37,53 @@ class FcmSendStateUpdateService(
             "prevAt" to stateUpdateDto.prevAt.toString(),
             "now" to LocalDateTime.now().toString()
         )
-        val tokens = entities.map { it.token }
-        val multicastMessage = MulticastMessage.builder()
-            .addAllTokens(tokens)
-            .putAllData(customData)
-            .build()
-        val response = FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
-        println(response)
-        // 2. 전체 성공/실패 횟수를 확인합니다.
 
-        println("기기 상태 알람 발송")
-        println("총 발송 시도: ${tokens.size}개")
-        println("성공: ${response.successCount}개")
-        println("실패: ${response.failureCount}개")
+        tokens.chunked(500).forEachIndexed { batchIndex, batchTokens ->
+            val multicastMessage = MulticastMessage.builder()
+                .addAllTokens(batchTokens)
+                .putAllData(customData)
+                .build()
 
-        // 3. 실패했다면 '왜' 실패했는지 응답을 뜯어봅니다.
-        if (response.failureCount > 0) {
-            response.responses.forEachIndexed { index, sendResponse ->
-                if (!sendResponse.isSuccessful) {
-                    // 어떤 토큰이 에러가 났고, 에러 내용이 무엇인지 로그를 남깁니다.
-                    val failedToken = tokens[index]
-                    val errorCode = sendResponse.exception.messagingErrorCode
-                    val errorMessage = sendResponse.exception.message
-                    println("실패 토큰: $failedToken")
-                    println("에러 코드: $errorCode") // 예: UNREGISTERED, INVALID_ARGUMENT
-                    println("에러 메시지: $errorMessage")
+            try {
+                val response = FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
+
+                logger.info {
+                    """
+                    [Batch $batchIndex] 기기 상태 알람 발송 결과
+                    - 대상 기기: ${stateUpdateDto.deviceId}
+                    - 상태: ${stateUpdateDto.state}
+                    - 시도: ${batchTokens.size}개
+                    - 성공: ${response.successCount}개
+                    - 실패: ${response.failureCount}개
+                    """.trimIndent()
                 }
+
+                if (response.failureCount > 0) {
+                    response.responses.forEachIndexed { index, sendResponse ->
+                        if (!sendResponse.isSuccessful) {
+                            // [중요] 원본 tokens가 아니라 쪼개진 batchTokens에서 인덱스로 가져옴
+                            val failedToken = batchTokens[index]
+                            val exception = sendResponse.exception
+
+                            logger.error {
+                                """
+                                [발송 실패 상세]
+                                - 토큰: $failedToken
+                                - 에러 코드: ${exception.messagingErrorCode}
+                                - 메시지: ${exception.message}
+                                """.trimIndent()
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                logger.error("기기 상태 알람 배치 전송 중 치명적 오류 발생: ${e.message}", e)
             }
-        } else {
-            println("모든 메시지가 FCM 서버에 정상적으로 접수되었습니다.")
         }
 
-        //엔티티삭제
-        deleteNotifications(stateUpdateDto.deviceId, stateUpdateDto.state)
-    }
-    private fun deleteNotifications(deviceId: Int, state: DeviceState)
-        = stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
-            targetDeviceId = deviceId,
-            expectState = state
+        stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
+            targetDeviceId = stateUpdateDto.deviceId,
+            expectState = stateUpdateDto.state
         )
+    }
 }

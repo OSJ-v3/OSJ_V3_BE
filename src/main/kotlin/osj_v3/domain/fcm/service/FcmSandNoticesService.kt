@@ -11,8 +11,18 @@ import osj_v3.domain.notices.dto.NoticePayloadDto
 class FcmSendNoticesService(
     private val noticeSubscriptionRepository: NoticeSubscriptionRepository
 ) {
+    private val logger = KotlinLogging.logger {}
+
     fun sendNotices(noticePayloadDto: NoticePayloadDto) {
         val entities = noticeSubscriptionRepository.findAll()
+
+        // 보낼 토큰이 없으면 바로 종료
+        if (entities.isEmpty()) {
+            logger.info("발송할 구독자가 없습니다.")
+            return
+        }
+
+        val tokens = entities.map { it.token }
 
         val customData = mapOf(
             "createAt" to noticePayloadDto.createAt.toString(),
@@ -20,40 +30,44 @@ class FcmSendNoticesService(
             "content" to noticePayloadDto.content
         )
 
-        val tokens = entities.map { it.token }
-
-        tokens.chunked(500).forEach {
+        tokens.chunked(500).forEachIndexed { batchIndex, batchTokens ->
             val multicastMessage = MulticastMessage.builder()
-                .addAllTokens(it)
+                .addAllTokens(batchTokens)
                 .putAllData(customData)
                 .build()
+
             try {
                 val response = FirebaseMessaging.getInstance().sendEachForMulticast(multicastMessage)
 
-                println("공지 알람 발송")
-                println("총 발송 시도: ${tokens.size}개")
-                println("성공: ${response.successCount}개")
-                println("실패: ${response.failureCount}개")
+                logger.info {
+                    """
+                    [Batch $batchIndex] 공지 알람 발송 결과
+                    - 시도: ${batchTokens.size}개
+                    - 성공: ${response.successCount}개
+                    - 실패: ${response.failureCount}개
+                    """.trimIndent()
+                }
 
-                // 3. 실패했다면 '왜' 실패했는지 응답을 뜯어봅니다.
                 if (response.failureCount > 0) {
                     response.responses.forEachIndexed { index, sendResponse ->
                         if (!sendResponse.isSuccessful) {
-                            // 어떤 토큰이 에러가 났고, 에러 내용이 무엇인지 로그를 남깁니다.
-                            val failedToken = tokens[index]
-                            val errorCode = sendResponse.exception.messagingErrorCode
-                            val errorMessage = sendResponse.exception.message
-                            println("실패 토큰: $failedToken")
-                            println("에러 코드: $errorCode") // 예: UNREGISTERED, INVALID_ARGUMENT
-                            println("에러 메시지: $errorMessage")
+                            // [중요] 원본 tokens가 아니라 쪼개진 batchTokens에서 가져와야 함
+                            val failedToken = batchTokens[index]
+                            val exception = sendResponse.exception
+
+                            logger.error {
+                                """
+                                [발송 실패 상세]
+                                - 토큰: $failedToken
+                                - 에러 코드: ${exception.messagingErrorCode}
+                                - 메시지: ${exception.message}
+                                """.trimIndent()
+                            }
                         }
                     }
-                } else {
-                    println("모든 메시지가 FCM 서버에 정상적으로 접수되었습니다.")
                 }
             } catch (e: Exception) {
-                val logger = KotlinLogging.logger {}
-                logger.error("공지 알람 전송 실패: ${e.message}", e)
+                logger.error("공지 알람 배치 전송 중 치명적 오류 발생: ${e.message}", e)
             }
         }
     }
