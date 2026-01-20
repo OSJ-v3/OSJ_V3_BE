@@ -63,6 +63,14 @@ class FcmSendNoticesService(
                                 - 메시지: ${exception.message}
                                 """.trimIndent()
                             }
+                            if(exception.message == "NotRegistered"){
+                                noticeSubscriptionRepository.deleteByToken(failedToken)
+                            }
+                            logger.info {
+                                """
+                                    NotRegistered 에러이기 때문에 DB에서 삭제
+                                """.trimIndent()
+                            }
                         }
                     }
                 }
