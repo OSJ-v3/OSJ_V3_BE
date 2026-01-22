@@ -13,6 +13,7 @@ interface StateNotificationRepository : JpaRepository<StateNotificationEntity, U
     fun findAllByTargetDeviceId(targetDeviceId: Int): MutableList<StateNotificationEntity>
     @Transactional
     fun deleteAllByTargetDeviceId(targetDeviceId: Int)
+    @Transactional
     fun deleteByTargetDeviceIdAndToken(targetDeviceId: Int, token: String)
     fun findByTargetDeviceIdAndToken(targetDeviceId: Int, token: String): StateNotificationEntity?
 }
