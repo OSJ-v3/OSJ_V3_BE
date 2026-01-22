@@ -9,9 +9,8 @@ class FcmTokenDeleteService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
     fun tokenDelete(fcmDto: FcmDto){
-        stateNotificationRepository.deleteByTargetDeviceIdAndExpectStateAndToken(
+        stateNotificationRepository.deleteByTargetDeviceIdAndToken(
             targetDeviceId = fcmDto.id,
-            expectState = fcmDto.expectState,
             token = fcmDto.token
         )
     }

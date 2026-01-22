@@ -11,9 +11,8 @@ class FcmTokenSaveService(
     private val stateNotificationRepository: StateNotificationRepository
 ) {
     fun tokenSave(fcmDto: FcmDto){
-        val entity = stateNotificationRepository.findByTargetDeviceIdAndExpectStateAndToken(
+        val entity = stateNotificationRepository.findByTargetDeviceIdAndToken(
             targetDeviceId = fcmDto.id,
-            expectState = fcmDto.expectState,
             token = fcmDto.token
         )
         if(entity != null) throw DuplicateNotificationException()
@@ -21,7 +20,6 @@ class FcmTokenSaveService(
         stateNotificationRepository.save(
             StateNotificationEntity(
                 targetDeviceId = fcmDto.id,
-                expectState = fcmDto.expectState,
                 token = fcmDto.token
             )
         )

@@ -5,6 +5,7 @@ import com.google.firebase.messaging.MulticastMessage
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.fcm.dto.StateUpdateDto
 import osj_v3.domain.fcm.repository.StateNotificationRepository
 import java.time.LocalDateTime
@@ -18,10 +19,8 @@ class FcmSendStateUpdateService(
     // 삭제 로직이 포함되어 있으므로 트랜잭션 필수
     @Transactional
     fun fcmSendStateUpdate(stateUpdateDto: StateUpdateDto) {
-        val entities = stateNotificationRepository.findAllByTargetDeviceIdAndExpectState(
-            targetDeviceId = stateUpdateDto.deviceId,
-            expectState = stateUpdateDto.state
-        )
+        if(stateUpdateDto.state != DeviceState.AVAILABLE) return
+        val entities = stateNotificationRepository.findAllByTargetDeviceId(stateUpdateDto.deviceId)
 
         // 보낼 토큰이 없으면 바로 종료
         if (entities.isEmpty()) {
@@ -81,9 +80,6 @@ class FcmSendStateUpdateService(
             }
         }
 
-        stateNotificationRepository.deleteAllByTargetDeviceIdAndExpectState(
-            targetDeviceId = stateUpdateDto.deviceId,
-            expectState = stateUpdateDto.state
-        )
+        stateNotificationRepository.deleteAllByTargetDeviceId(stateUpdateDto.deviceId)
     }
 }

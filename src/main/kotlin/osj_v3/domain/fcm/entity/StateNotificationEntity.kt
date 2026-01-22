@@ -7,14 +7,13 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
-import osj_v3.domain.common.enums.DeviceState
 import java.util.UUID
 
 @Entity
 @Table(
     name = "state_notification",
     indexes = [
-        Index(name = "idx_device_state", columnList = "targetDeviceId, expectState")
+        Index(name = "idx_device_state", columnList = "targetDeviceId")
     ]
 )
 
@@ -29,7 +28,4 @@ class StateNotificationEntity(
 
     @Column(nullable = false)
     val targetDeviceId: Int, // 알림 대상 기기 ID
-
-    @Column(nullable = false)
-    val expectState: DeviceState
 )
