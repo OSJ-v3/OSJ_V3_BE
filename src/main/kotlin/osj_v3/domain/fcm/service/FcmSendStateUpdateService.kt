@@ -32,7 +32,6 @@ class FcmSendStateUpdateService(
 
         val customData = mapOf(
             "device_id" to stateUpdateDto.deviceId.toString(),
-            "state" to stateUpdateDto.state.code.toString(),
             "prevAt" to stateUpdateDto.prevAt.toString(),
             "now" to LocalDateTime.now().toString()
         )
