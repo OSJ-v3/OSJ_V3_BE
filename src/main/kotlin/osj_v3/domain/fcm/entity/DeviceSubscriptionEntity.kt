@@ -11,13 +11,13 @@ import java.util.UUID
 
 @Entity
 @Table(
-    name = "state_notification",
+    name = "device_subscription",
     indexes = [
         Index(name = "idx_device_state", columnList = "targetDeviceId")
     ]
 )
 
-class StateNotificationEntity(
+class DeviceSubscriptionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)") // MySQL UUID 효율적 저장

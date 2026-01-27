@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import osj_v3.domain.common.enums.DeviceState
 import osj_v3.domain.fcm.dto.StateUpdateDto
-import osj_v3.domain.fcm.repository.StateNotificationRepository
+import osj_v3.domain.fcm.repository.DeviceSubscriptionRepository
 import java.time.LocalDateTime
 
 @Service
 class FcmSendStateUpdateService(
-    private val stateNotificationRepository: StateNotificationRepository
+    private val deviceSubscriptionRepository: DeviceSubscriptionRepository
 ) {
     private val logger = KotlinLogging.logger {}
 
@@ -20,7 +20,7 @@ class FcmSendStateUpdateService(
     @Transactional
     fun fcmSendStateUpdate(stateUpdateDto: StateUpdateDto) {
         if(stateUpdateDto.state != DeviceState.AVAILABLE) return
-        val entities = stateNotificationRepository.findAllByTargetDeviceId(stateUpdateDto.deviceId)
+        val entities = deviceSubscriptionRepository.findAllByTargetDeviceId(stateUpdateDto.deviceId)
 
         // 보낼 토큰이 없으면 바로 종료
         if (entities.isEmpty()) {
@@ -79,6 +79,6 @@ class FcmSendStateUpdateService(
             }
         }
 
-        stateNotificationRepository.deleteAllByTargetDeviceId(stateUpdateDto.deviceId)
+        deviceSubscriptionRepository.deleteAllByTargetDeviceId(stateUpdateDto.deviceId)
     }
 }
