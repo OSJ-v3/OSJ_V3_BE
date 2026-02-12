@@ -1,6 +1,4 @@
 spring:
-  Jackson:
-    property-naming-strategy: SNAKE_CASE
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: ${DB_URL}
@@ -24,4 +22,4 @@ discord:
 fcm:
   key: ${FCM_CONTENTS}
 cors:
-  allowed-origins: "http://localhost:3000,http://localhost:3000"
+  allowed-origins: "https://osjv3.vercel.app"

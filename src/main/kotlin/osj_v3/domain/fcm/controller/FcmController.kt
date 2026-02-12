@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
-import osj_v3.domain.fcm.dto.FcmByTokenDto
 import osj_v3.domain.fcm.dto.FcmDto
 import osj_v3.domain.fcm.service.FcmTokenDeleteService
 import osj_v3.domain.fcm.service.FcmTokenRequestService
@@ -29,7 +28,7 @@ class FcmController(
         fcmTokenDeleteService.tokenDelete(fcmDto)
     }
     @GetMapping("/list")
-    fun tokenList(@RequestParam("fcm_token") token: String): List<FcmByTokenDto> {
+    fun tokenList(@RequestParam("token") token: String): List<Int> {
         return fcmTokenRequestService.tokenRequest(token)
     }
 }

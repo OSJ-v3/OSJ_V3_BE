@@ -2,6 +2,7 @@ package osj_v3.domain.socket.config.decorator
 
 import com.fasterxml.jackson.core.exc.StreamReadException
 import com.fasterxml.jackson.databind.exc.MismatchedInputException
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException
 import org.slf4j.LoggerFactory
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketHandler
@@ -20,14 +21,22 @@ class CentralizedErrorHandlerDecorator(
             // 원본 핸들러의 로직을 실행
             super.handleMessage(session, message)
         } catch (e: OsjException) {
-            // OsjException (IdNotFoundException 포함) 처리
             handleOsjException(session, e)
         } catch (e: MismatchedInputException) {
             //json 파싱 실패
             handleMismatchedInputException(session, e)
         } catch (e: StreamReadException){
             handleStreamReadException(session, e)
-        } catch (e: Exception) {
+        } catch (e: ValueInstantiationException) {
+            // ⭐ Jackson이 객체 생성을 실패했을 때의 예외 처리 추가
+            val cause = e.cause
+            if (cause is OsjException) {
+                // 원인이 OsjException이라면 (예: EnumValueNotFoundException)
+                handleOsjException(session, cause)
+            } else {
+                handleGenericException(session, e)
+            }
+        }catch (e: Exception) {
             // 기타 모든 예상치 못한 오류 처리 (JsonProcessingException 등)
             handleGenericException(session, e)
         }

@@ -2,16 +2,15 @@ package osj_v3.domain.fcm.service
 
 import org.springframework.stereotype.Service
 import osj_v3.domain.fcm.dto.FcmDto
-import osj_v3.domain.fcm.repository.StateNotificationRepository
+import osj_v3.domain.fcm.repository.DeviceSubscriptionRepository
 
 @Service
 class FcmTokenDeleteService(
-    private val stateNotificationRepository: StateNotificationRepository
+    private val deviceSubscriptionRepository: DeviceSubscriptionRepository
 ) {
     fun tokenDelete(fcmDto: FcmDto){
-        stateNotificationRepository.deleteByTargetDeviceIdAndExpectStateAndToken(
+        deviceSubscriptionRepository.deleteByTargetDeviceIdAndToken(
             targetDeviceId = fcmDto.id,
-            expectState = fcmDto.expectState,
             token = fcmDto.token
         )
     }

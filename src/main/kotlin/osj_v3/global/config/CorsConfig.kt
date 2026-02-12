@@ -15,9 +15,11 @@ class CorsConfig(
         val origins = allowedOrigins.split(",").toTypedArray()
 
         registry.addMapping("/**") // 모든 경로에 대해
-            .allowedOrigins(*origins) // 허용할 프론트엔드 도메인
+            .allowedOriginPatterns("*") //개발용
+            .allowCredentials(true) //개발용
+            //개발용 .allowedOrigins(*origins) // 허용할 프론트엔드 도메인
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 메소드
-            .allowedHeaders("*") // 모든 헤더 허용
+            //개발용 .allowedHeaders("*") // 모든 헤더 허용
             .allowCredentials(true) // 쿠키/인증 정보 포함 허용
     }
 }

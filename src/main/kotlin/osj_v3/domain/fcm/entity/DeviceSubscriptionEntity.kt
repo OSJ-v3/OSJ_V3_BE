@@ -7,18 +7,17 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.Index
 import jakarta.persistence.Table
-import osj_v3.domain.common.enums.DeviceState
 import java.util.UUID
 
 @Entity
 @Table(
-    name = "state_notification",
+    name = "device_subscription",
     indexes = [
-        Index(name = "idx_device_state", columnList = "targetDeviceId, expectState")
+        Index(name = "idx_device_state", columnList = "targetDeviceId")
     ]
 )
 
-class StateNotificationEntity(
+class DeviceSubscriptionEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "BINARY(16)") // MySQL UUID 효율적 저장
@@ -29,7 +28,4 @@ class StateNotificationEntity(
 
     @Column(nullable = false)
     val targetDeviceId: Int, // 알림 대상 기기 ID
-
-    @Column(nullable = false)
-    val expectState: DeviceState
 )
