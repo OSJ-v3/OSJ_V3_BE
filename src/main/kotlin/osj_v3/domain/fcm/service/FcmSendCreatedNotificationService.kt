@@ -8,7 +8,7 @@ import osj_v3.domain.fcm.repository.NoticeSubscriptionRepository
 import osj_v3.domain.notices.dto.NoticePayloadDto
 
 @Service
-class FcmSendNoticesService(
+class FcmSendCreatedNotificationService(
     private val noticeSubscriptionRepository: NoticeSubscriptionRepository
 ) {
     private val logger = KotlinLogging.logger {}
